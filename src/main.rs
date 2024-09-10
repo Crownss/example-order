@@ -1,13 +1,13 @@
 use async_stream::stream;
-use futures::{stream::Stream, StreamExt}; // Tambahkan StreamExt untuk menggunakan next()
+use futures::{stream::Stream, StreamExt};
 use rand::Rng;
-use std::{collections::VecDeque, fmt};
+use std::fmt;
 use tokio::time::{sleep, Duration};
 
 struct Order {
     id: u64,
     price: f64,
-    action: bool, //action buy=true || action sell=false same as pdf with diff name i'd like to put "action" for buy or sell
+    action: bool, //action buy=true || action sell=false, i'd like to put "action" word for buy or sell
 }
 impl fmt::Debug for Order {
     fn fmt(&self, formater: &mut fmt::Formatter) -> fmt::Result {
@@ -101,9 +101,10 @@ async fn execute_orders(get_order_stream: impl Stream<Item = Order>) {
                 .position(|sell| sell.price <= order.price)
             {
                 let matched_sell = sell_orders.remove(idx);
-                matched = matched.replace("buyorderid", format!("{}", order.id).as_str());
-                matched = matched.replace("sellorderid", format!("{}", matched_sell.id).as_str());
-                matched = matched.replace("pricing", format!("{}", order.price).as_str());
+                matched = matched
+                    .replace("buyorderid", format!("{}", order.id).as_str())
+                    .replace("sellorderid", format!("{}", matched_sell.id).as_str())
+                    .replace("pricing", format!("{}", order.price).as_str());
             } else {
                 buy_orders.push(order);
                 is_match = false;
@@ -112,9 +113,10 @@ async fn execute_orders(get_order_stream: impl Stream<Item = Order>) {
             printing = printing.replace("something", "Sell");
             if let Some(idx) = buy_orders.iter().position(|buy| buy.price >= order.price) {
                 let matched_buy = buy_orders.remove(idx);
-                matched = matched.replace("buyorderid", format!("{}", matched_buy.id).as_str());
-                matched = matched.replace("sellorderid", format!("{}", order.id).as_str());
-                matched = matched.replace("pricing", format!("{}", matched_buy.price).as_str());
+                matched = matched
+                    .replace("buyorderid", format!("{}", matched_buy.id).as_str())
+                    .replace("sellorderid", format!("{}", order.id).as_str())
+                    .replace("pricing", format!("{}", matched_buy.price).as_str());
             } else {
                 sell_orders.push(order);
                 is_match = false;
