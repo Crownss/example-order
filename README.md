@@ -43,7 +43,7 @@ async fn execute_orders(order_list: Vec<Order>) {
             yield order;
         }
     }
-    futures::pin_mut!(order_stream); //pin the macros variable
+    futures::pin_mut!(order_stream); //pin the variable of macros stream!
     //continue code
     }
 ```
