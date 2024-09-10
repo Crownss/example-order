@@ -45,7 +45,7 @@ async fn execute_orders(order_list: Vec<Order>) {
     }
     futures::pin_mut!(order_stream); //pin the variable of macros stream!
     //continue code
-    }
+}
 ```
 
 # How to run?
