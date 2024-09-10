@@ -74,7 +74,7 @@ async fn generate_orders() -> Vec<Order> {
     ]
 }
 
-fn serve_orders(order_list: Vec<Order>) -> impl Stream<Item = Order> {
+async fn serve_orders(order_list: Vec<Order>) -> impl Stream<Item = Order> {
     stream! {
         for order in order_list {
             let delay_duration = rand::thread_rng().gen_range(500..900);
@@ -132,6 +132,6 @@ async fn execute_orders(get_order_stream: impl Stream<Item = Order>) {
 #[tokio::main]
 async fn main() {
     let orders = generate_orders().await;
-    let serves = serve_orders(orders);
+    let serves = serve_orders(orders).await;
     execute_orders(serves).await;
 }
