@@ -1,6 +1,6 @@
 # First of all
 
-### i'm rather use `impl fmt::Debug` for ignoring `action` in struct while print `Order` struct instead of `#[derive(Debug)]`
+### i'm rather use `impl fmt::Debug` for ignoring `action` in struct while print `Order` struct instead of `#[derive(Debug)]` like:
 ```rust
 struct Order {
     id: u64,
@@ -47,3 +47,6 @@ async fn execute_orders(order_list: Vec<Order>) {
     //continue code
     }
 ```
+
+# How to run?
+just type `$cargo run .` on terminal
